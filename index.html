@@ -116,7 +116,8 @@ const CFG={
   BIN_ID:"6b03fe53ac6210605a9d78b6",                 // JSONBin bin ID (make the bin PUBLIC so no key is needed to read)
   WHATSAPP:"917798306505",   // country code + number, no +
   PHONE:"7798306505",
-  INSTAGRAM:"amitledwall"
+  INSTAGRAM:"amitledwall",
+  READ_KEY:"" // paste the read-only Access Key here if the bin is private
 };
 /* ====================== */
 const $=s=>document.querySelector(s),esc=s=>String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -134,19 +135,22 @@ $("#f").onsubmit=e=>{e.preventDefault();const g=i=>$("#"+i).value.trim();
 
 const isYT=u=>/youtu\.?be/.test(u),ytId=u=>(u.match(/(?:v=|youtu\.be\/|embed\/|shorts\/)([\w-]{11})/)||[])[1];
 const thumb=(u,w)=>u.includes("/upload/")?u.replace("/upload/",`/upload/f_auto,q_auto,w_${w}/`):u;
+const isIG=u=>/instagram\.com\/(reels?|p|tv)\//.test(u),igUrl=u=>{const m=u.match(/instagram\.com\/(reels?|p|tv)\/([\w-]+)/);return m?`https://www.instagram.com/${m[1]=="reels"?"reel":m[1]}/${m[2]}/embed`:""};
+const vsrc=u=>u.includes("/video/upload/")&&!/\.(mp4|webm)(\?|$)/i.test(u)?u.replace("/video/upload/","/video/upload/f_mp4,vc_h264,q_auto/").replace(/\.\w+(\?.*)?$/,".mp4"):u;
+const vpost=u=>u.includes("/video/upload/")?u.replace("/video/upload/","/video/upload/so_1,f_jpg,w_700/").replace(/\.\w+(\?.*)?$/,".jpg"):"";
 let D={videos:[],gallery:[]};
 async function load(){
- if(CFG.BIN_ID){try{const r=await fetch(`https://api.jsonbin.io/v3/b/${CFG.BIN_ID}/latest`,{cache:"no-store"});const j=await r.json();D=Object.assign(D,j.record||{});}catch(e){console.warn(e)}}
+ if(CFG.BIN_ID){try{const r=await fetch(`https://api.jsonbin.io/v3/b/${CFG.BIN_ID}/latest`,{cache:"no-store",headers:CFG.READ_KEY?{"X-Access-Key":CFG.READ_KEY}:{}});if(!r.ok)console.error("JSONBin read failed",r.status);const j=await r.json();D=Object.assign(D,j.record||{});}catch(e){console.warn(e)}}
  vids();gal("All");reveal();
 }
 function vids(){
  const v=D.videos||[];
  $("#vg").innerHTML=(v.length?v:Array.from({length:6},(_,i)=>({empty:1,title:"Video "+(i+1)+" – coming soon"}))).map((x,i)=>{
   if(x.empty)return `<div class="vc empty rv"><div class="pl"><i>▶</i></div><div class="cp">${esc(x.title)}</div></div>`;
-  const media=isYT(x.url)?`<img src="https://img.youtube.com/vi/${ytId(x.url)}/hqdefault.jpg" alt="${esc(x.title)}" loading="lazy">`:`<video src="${esc(x.url)}#t=0.8" preload="metadata" muted playsinline></video>`;
+  const media=isIG(x.url)?`<div style="position:absolute;inset:0;background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045);display:grid;place-items:center;color:#fff;font-weight:800;font-size:1.1rem">📸 Instagram Reel</div>`:isYT(x.url)?`<img src="https://img.youtube.com/vi/${ytId(x.url)}/hqdefault.jpg" alt="${esc(x.title)}" loading="lazy">`:`<video src="${esc(vsrc(x.url))}${vpost(x.url)?"":"#t=0.8"}" poster="${esc(vpost(x.url))}" preload="${vpost(x.url)?"none":"metadata"}" muted playsinline></video>`;
   return `<div class="vc rv" onclick="pv(${i})">${media}<div class="pl"><i>▶</i></div><div class="cp">${esc(x.title)}</div></div>`}).join("");
 }
-function pv(i){const u=D.videos[i].url;open_(isYT(u)?`<iframe src="https://www.youtube.com/embed/${ytId(u)}?autoplay=1&rel=0" allow="autoplay;fullscreen" allowfullscreen></iframe>`:`<video src="${esc(u)}" controls autoplay playsinline></video>`)}
+function pv(i){const u=D.videos[i].url;if(isIG(u))return open_(`<iframe src="${igUrl(u)}" style="width:min(420px,92vw);height:82vh;aspect-ratio:auto;display:block;margin:auto;background:#fff" allowfullscreen></iframe>`);open_(isYT(u)?`<iframe src="https://www.youtube.com/embed/${ytId(u)}?autoplay=1&rel=0" allow="autoplay;fullscreen" allowfullscreen></iframe>`:`<video src="${esc(vsrc(u))}" controls autoplay playsinline></video>`)}
 function gal(c){
  const g=D.gallery||[],cats=["All",...new Set(g.map(x=>x.cat).filter(Boolean))];
  $("#fl").innerHTML=g.length?cats.map(k=>`<button class="${k==c?"on":""}" onclick="gal('${esc(k)}')">${esc(k)}</button>`).join(""):"";
