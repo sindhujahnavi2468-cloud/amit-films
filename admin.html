@@ -63,7 +63,7 @@ small{color:var(--mut)}
 <script>
 const ADMIN_PASSWORD="admin123"; /* CHANGE THIS */
 const $=s=>document.querySelector(s),esc=s=>String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-let D={videos:[],gallery:[]},S=Object.assign({bin:"6b03fe53ac6210605a9d78b6",key:"$2a$10$RjxthPmRs1dCJ7wC0eU1E.f8PvFhge/GSX0ls9nLNsCy0ABBHml5W",cloud:"u8f3rysn",preset:"amit films"},JSON.parse(localStorage.getItem("amit_cfg")||"{}"));
+let D={videos:[],gallery:[]},S=Object.assign({bin:"6b044786ac6210605a9e2395",key:"$2a$10$RjxthPmRs1dCJ7wC0eU1E.f8PvFhge/GSX0ls9nLNsCy0ABBHml5W",cloud:"u8f3rysn",preset:"amit films"},JSON.parse(localStorage.getItem("amit_cfg")||"{}"));
 S.cats=S.cats||"Stage LED, Wedding, Corporate, Concert, Festival";
 function toast(t){const e=$("#toast");e.textContent=t;e.style.display="block";clearTimeout(toast.t);toast.t=setTimeout(()=>e.style.display="none",2800)}
 function login(){if($("#pw").value===ADMIN_PASSWORD){$("#lock").remove();sessionStorage.ok=1;init()}else toast("Wrong password")}
