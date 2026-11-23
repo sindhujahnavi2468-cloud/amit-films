@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin – Amit LED Wall</title>
+<meta name="robots" content="noindex,nofollow">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f6f3ee;--ink:#14142b;--mut:#6a6a82;--a:#5b3df5;--line:#e8e3d8;--r:#e5484d}
+*{box-sizing:border-box;margin:0}body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--ink)}
+.w{max-width:1050px;margin:auto;padding:22px}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;flex-wrap:wrap;gap:12px}.top h1{font-size:1.4rem}
+.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:22px;margin-bottom:20px}
+.card h2{font-size:1.05rem;margin-bottom:14px}
+input,select{padding:12px 14px;border-radius:12px;border:1.5px solid var(--line);font:inherit;background:var(--bg);width:100%}input:focus,select:focus{outline:0;border-color:var(--a)}
+.btn{padding:12px 22px;border-radius:12px;border:0;background:var(--ink);color:#fff;font:inherit;font-weight:700;cursor:pointer}.btn:hover{background:var(--a)}.btn.g{background:#fff;color:var(--ink);border:1.5px solid var(--line)}.btn.s{background:#16a34a}
+.tabs{display:flex;gap:8px;margin-bottom:20px}.tabs button{padding:10px 22px;border-radius:99px;border:1.5px solid var(--line);background:#fff;font:inherit;font-weight:700;cursor:pointer}.tabs button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.row{display:grid;grid-template-columns:1fr 1fr auto;gap:10px;margin-bottom:12px}
+.drop{border:2px dashed #cfc7ff;border-radius:16px;padding:26px;text-align:center;color:var(--mut);background:#faf8ff;cursor:pointer;margin-bottom:14px}.drop:hover{border-color:var(--a)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px;margin-top:16px}
+.it{position:relative;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fff}.it img,.it video{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:#eee}
+.it .m{padding:8px 10px;font-size:.78rem}.it .m b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.it .m select{padding:5px 8px;font-size:.78rem;margin-top:4px}
+.it .x{position:absolute;top:6px;right:6px;width:28px;height:28px;border-radius:50%;border:0;background:var(--r);color:#fff;cursor:pointer;font-weight:700}
+.it .yt{aspect-ratio:4/3;display:grid;place-items:center;background:#fff1f1;font-weight:800;color:var(--r)}
+#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:12px 24px;border-radius:99px;font-weight:600;display:none;z-index:9}
+#lock{position:fixed;inset:0;background:var(--bg);display:grid;place-items:center;z-index:20}#lock .card{width:min(360px,92vw);text-align:center}#lock input{margin:14px 0}
+small{color:var(--mut)}
+@media(max-width:640px){.row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div id="lock"><div class="card"><h2>🔒 Amit LED Wall Admin</h2><input id="pw" type="password" placeholder="Password"><button class="btn" style="width:100%" onclick="login()">Enter</button></div></div>
+
+<div class="w">
+<div class="top"><h1>Amit LED Wall · Admin</h1><button class="btn s" onclick="save()">💾 Save changes</button></div>
+<div class="tabs"><button class="on" data-t="v">🎬 Videos</button><button data-t="g">🖼️ Gallery</button><button data-t="s">⚙️ Settings</button></div>
+
+<div id="v" class="pane"><div class="card"><h2>Upload videos</h2>
+<div class="drop" onclick="vf.click()">Click to upload videos (Cloudinary)<br><small>You can select many at once</small></div><input id="vf" type="file" accept="video/*" multiple hidden>
+<h2 style="margin-top:18px">…or add a YouTube / video link</h2>
+<div class="row"><input id="vt" placeholder="Title"><input id="vu" placeholder="https://youtube.com/… or .mp4 link"><button class="btn" onclick="addVid()">Add</button></div></div>
+<div class="card"><h2>Videos (<span id="vc">0</span>)</h2><div class="grid" id="vl"></div></div></div>
+
+<div id="g" class="pane" hidden><div class="card"><h2>Upload photos</h2>
+<div style="max-width:260px;margin-bottom:12px"><small>Category for this upload</small><select id="gc"></select></div>
+<div class="drop" onclick="gf.click()">Click to upload images (Cloudinary)<br><small>Select many at once</small></div><input id="gf" type="file" accept="image/*" multiple hidden></div>
+<div class="card"><h2>Photos (<span id="gcn">0</span>)</h2><div class="grid" id="gl"></div></div></div>
+
+<div id="s" class="pane" hidden><div class="card"><h2>Connection settings</h2>
+<p><small>Saved only in this browser. Fill once.</small></p><br>
+<div style="display:grid;gap:12px">
+<input id="s_bin" placeholder="JSONBin BIN ID">
+<input id="s_key" placeholder="JSONBin Master Key (X-Master-Key)">
+<input id="s_cloud" placeholder="Cloudinary cloud name">
+<input id="s_preset" placeholder="Cloudinary unsigned upload preset">
+<input id="s_cats" placeholder="Gallery categories, comma separated">
+<button class="btn" onclick="saveCfg()">Save settings & reload data</button></div></div>
+<div class="card"><small>Tip: put the same Bin ID in index.html (CFG.BIN_ID). Make the bin public so visitors can read it. Create an <b>unsigned</b> upload preset in Cloudinary → Settings → Upload.</small></div></div>
+</div>
+<div id="toast"></div>
+
+<script>
+const ADMIN_PASSWORD="admin123"; /* CHANGE THIS */
+const $=s=>document.querySelector(s),esc=s=>String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+let D={videos:[],gallery:[]},S=JSON.parse(localStorage.getItem("amit_cfg")||"{}");
+S.cats=S.cats||"Stage LED, Wedding, Corporate, Concert, Festival";
+function toast(t){const e=$("#toast");e.textContent=t;e.style.display="block";clearTimeout(toast.t);toast.t=setTimeout(()=>e.style.display="none",2800)}
+function login(){if($("#pw").value===ADMIN_PASSWORD){$("#lock").remove();sessionStorage.ok=1;init()}else toast("Wrong password")}
+$("#pw").onkeydown=e=>{if(e.key=="Enter")login()};
+if(sessionStorage.ok){$("#lock").remove();init()}
+document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tabs button").forEach(x=>x.classList.toggle("on",x==b));document.querySelectorAll(".pane").forEach(p=>p.hidden=p.id!=b.dataset.t)});
+function fillCfg(){["bin","key","cloud","preset","cats"].forEach(k=>$("#s_"+k).value=S[k]||"");const c=cats();$("#gc").innerHTML=c.map(x=>`<option>${esc(x)}</option>`).join("")}
+const cats=()=>S.cats.split(",").map(x=>x.trim()).filter(Boolean);
+function saveCfg(){["bin","key","cloud","preset","cats"].forEach(k=>S[k]=$("#s_"+k).value.trim());localStorage.setItem("amit_cfg",JSON.stringify(S));fillCfg();toast("Settings saved");pull()}
+async function init(){fillCfg();render();if(S.bin)pull()}
+async function pull(){
+ if(!S.bin)return toast("Add JSONBin ID in Settings");
+ try{const r=await fetch(`https://api.jsonbin.io/v3/b/${S.bin}/latest`,{headers:S.key?{"X-Master-Key":S.key}:{}});const j=await r.json();if(!r.ok)throw 0;D=Object.assign({videos:[],gallery:[]},j.record);render();toast("Data loaded")}catch(e){toast("Could not load bin")}
+}
+async function save(){
+ if(!S.bin||!S.key)return toast("Add JSONBin ID & key in Settings");
+ try{const r=await fetch(`https://api.jsonbin.io/v3/b/${S.bin}`,{method:"PUT",headers:{"Content-Type":"application/json","X-Master-Key":S.key},body:JSON.stringify(D)});if(!r.ok)throw 0;toast("✅ Saved! Website updated")}catch(e){toast("❌ Save failed – check ID/key")}
+}
+async function up(file,type){
+ if(!S.cloud||!S.preset)throw toast("Add Cloudinary details in Settings");
+ const f=new FormData();f.append("file",file);f.append("upload_preset",S.preset);
+ const r=await fetch(`https://api.cloudinary.com/v1_1/${S.cloud}/${type}/upload`,{method:"POST",body:f});const j=await r.json();if(!j.secure_url)throw 0;return j.secure_url
+}
+async function batch(files,type,add){
+ let n=0;for(const f of files){toast(`Uploading ${++n}/${files.length}…`);try{add(await up(f,type),f.name.replace(/\.[^.]+$/,""))}catch(e){toast("Upload failed: "+f.name)}}
+ render();toast("Uploaded – press Save changes")
+}
+$("#vf").onchange=e=>{batch([...e.target.files],"video",(url,t)=>D.videos.push({title:t,url}));e.target.value=""};
+$("#gf").onchange=e=>{const c=$("#gc").value;batch([...e.target.files],"image",url=>D.gallery.push({url,cat:c}));e.target.value=""};
+function addVid(){const t=$("#vt").value.trim(),u=$("#vu").value.trim();if(!u)return toast("Paste a link");D.videos.push({title:t||"Event video",url:u});$("#vt").value=$("#vu").value="";render()}
+const yid=u=>(u.match(/(?:v=|youtu\.be\/|embed\/|shorts\/)([\w-]{11})/)||[])[1];
+const th=(u,w)=>u.includes("/upload/")?u.replace("/upload/",`/upload/f_auto,q_auto,w_${w}/`):u;
+function del(k,i){if(confirm("Remove this item?")){D[k].splice(i,1);render()}}
+function mv(k,i,d){const j=i+d;if(j<0||j>=D[k].length)return;[D[k][i],D[k][j]]=[D[k][j],D[k][i]];render()}
+function render(){
+ $("#vc").textContent=D.videos.length;$("#gcn").textContent=D.gallery.length;
+ $("#vl").innerHTML=D.videos.map((v,i)=>`<div class="it">${yid(v.url)?`<img src="https://img.youtube.com/vi/${yid(v.url)}/hqdefault.jpg">`:`<video src="${esc(v.url)}#t=0.8" preload="metadata" muted></video>`}<button class="x" onclick="del('videos',${i})">✕</button><div class="m"><input value="${esc(v.title)}" onchange="D.videos[${i}].title=this.value" style="padding:5px 8px;font-size:.78rem"><div style="margin-top:4px"><button class="btn g" style="padding:3px 10px" onclick="mv('videos',${i},-1)">←</button> <button class="btn g" style="padding:3px 10px" onclick="mv('videos',${i},1)">→</button></div></div></div>`).join("");
+ $("#gl").innerHTML=D.gallery.map((g,i)=>`<div class="it"><img src="${esc(th(g.url,300))}" loading="lazy"><button class="x" onclick="del('gallery',${i})">✕</button><div class="m"><select onchange="D.gallery[${i}].cat=this.value">${cats().map(c=>`<option ${c==g.cat?"selected":""}>${esc(c)}</option>`).join("")}</select><div style="margin-top:4px"><button class="btn g" style="padding:3px 10px" onclick="mv('gallery',${i},-1)">←</button> <button class="btn g" style="padding:3px 10px" onclick="mv('gallery',${i},1)">→</button></div></div></div>`).join("");
+}
+</script>
+</body>
+</html>
