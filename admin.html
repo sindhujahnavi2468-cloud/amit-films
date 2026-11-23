@@ -68,7 +68,6 @@ S.cats=S.cats||"Stage LED, Wedding, Corporate, Concert, Festival";
 function toast(t){const e=$("#toast");e.textContent=t;e.style.display="block";clearTimeout(toast.t);toast.t=setTimeout(()=>e.style.display="none",2800)}
 function login(){if($("#pw").value===ADMIN_PASSWORD){$("#lock").remove();sessionStorage.ok=1;init()}else toast("Wrong password")}
 $("#pw").onkeydown=e=>{if(e.key=="Enter")login()};
-if(sessionStorage.ok){$("#lock").remove();init()}
 document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tabs button").forEach(x=>x.classList.toggle("on",x==b));document.querySelectorAll(".pane").forEach(p=>p.hidden=p.id!=b.dataset.t)});
 function fillCfg(){["bin","key","cloud","preset","cats"].forEach(k=>$("#s_"+k).value=S[k]||"");const c=cats();$("#gc").innerHTML=c.map(x=>`<option>${esc(x)}</option>`).join("")}
 const cats=()=>S.cats.split(",").map(x=>x.trim()).filter(Boolean);
@@ -103,6 +102,7 @@ function render(){
  $("#vl").innerHTML=D.videos.map((v,i)=>`<div class="it">${/instagram\.com/.test(v.url)?`<div class="yt">📸 Reel</div>`:yid(v.url)?`<img src="https://img.youtube.com/vi/${yid(v.url)}/hqdefault.jpg">`:`<video src="${esc(v.url)}#t=0.8" preload="metadata" muted></video>`}<button class="x" onclick="del('videos',${i})">✕</button><div class="m"><input value="${esc(v.title)}" onchange="D.videos[${i}].title=this.value" style="padding:5px 8px;font-size:.78rem"><div style="margin-top:4px"><button class="btn g" style="padding:3px 10px" onclick="mv('videos',${i},-1)">←</button> <button class="btn g" style="padding:3px 10px" onclick="mv('videos',${i},1)">→</button></div></div></div>`).join("");
  $("#gl").innerHTML=D.gallery.map((g,i)=>`<div class="it"><img src="${esc(th(g.url,300))}" loading="lazy"><button class="x" onclick="del('gallery',${i})">✕</button><div class="m"><select onchange="D.gallery[${i}].cat=this.value">${cats().map(c=>`<option ${c==g.cat?"selected":""}>${esc(c)}</option>`).join("")}</select><div style="margin-top:4px"><button class="btn g" style="padding:3px 10px" onclick="mv('gallery',${i},-1)">←</button> <button class="btn g" style="padding:3px 10px" onclick="mv('gallery',${i},1)">→</button></div></div></div>`).join("");
 }
+if(sessionStorage.ok){$("#lock").remove();init()}
 </script>
 </body>
 </html>
