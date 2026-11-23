@@ -38,8 +38,8 @@ small{color:var(--mut)}
 
 <div id="v" class="pane"><div class="card"><h2>Upload videos</h2>
 <div class="drop" onclick="vf.click()">Click to upload videos (Cloudinary)<br><small>You can select many at once</small></div><input id="vf" type="file" accept="video/*" multiple hidden>
-<h2 style="margin-top:18px">…or add a YouTube / video link</h2>
-<div class="row"><input id="vt" placeholder="Title"><input id="vu" placeholder="https://youtube.com/… or .mp4 link"><button class="btn" onclick="addVid()">Add</button></div></div>
+<h2 style="margin-top:18px">…or add an Instagram Reel / YouTube / video link</h2>
+<div class="row"><input id="vt" placeholder="Title"><input id="vu" placeholder="Instagram Reel / YouTube / .mp4 link"><button class="btn" onclick="addVid()">Add</button></div></div>
 <div class="card"><h2>Videos (<span id="vc">0</span>)</h2><div class="grid" id="vl"></div></div></div>
 
 <div id="g" class="pane" hidden><div class="card"><h2>Upload photos</h2>
@@ -80,7 +80,7 @@ async function pull(){
 }
 async function save(){
  if(!S.bin||!S.key)return toast("Add JSONBin ID & key in Settings");
- try{const r=await fetch(`https://api.jsonbin.io/v3/b/${S.bin}`,{method:"PUT",headers:{"Content-Type":"application/json","X-Master-Key":S.key},body:JSON.stringify(D)});if(!r.ok)throw 0;toast("✅ Saved! Website updated")}catch(e){toast("❌ Save failed – check ID/key")}
+ try{const r=await fetch(`https://api.jsonbin.io/v3/b/${S.bin}`,{method:"PUT",headers:{"Content-Type":"application/json","X-Master-Key":S.key},body:JSON.stringify(D)});if(!r.ok)throw r.status;toast("✅ Saved! Website updated")}catch(e){toast("❌ Save failed ("+e+") – check ID/key")}
 }
 async function up(file,type){
  if(!S.cloud||!S.preset)throw toast("Add Cloudinary details in Settings");
@@ -100,7 +100,7 @@ function del(k,i){if(confirm("Remove this item?")){D[k].splice(i,1);render();sav
 function mv(k,i,d){const j=i+d;if(j<0||j>=D[k].length)return;[D[k][i],D[k][j]]=[D[k][j],D[k][i]];render()}
 function render(){
  $("#vc").textContent=D.videos.length;$("#gcn").textContent=D.gallery.length;
- $("#vl").innerHTML=D.videos.map((v,i)=>`<div class="it">${yid(v.url)?`<img src="https://img.youtube.com/vi/${yid(v.url)}/hqdefault.jpg">`:`<video src="${esc(v.url)}#t=0.8" preload="metadata" muted></video>`}<button class="x" onclick="del('videos',${i})">✕</button><div class="m"><input value="${esc(v.title)}" onchange="D.videos[${i}].title=this.value" style="padding:5px 8px;font-size:.78rem"><div style="margin-top:4px"><button class="btn g" style="padding:3px 10px" onclick="mv('videos',${i},-1)">←</button> <button class="btn g" style="padding:3px 10px" onclick="mv('videos',${i},1)">→</button></div></div></div>`).join("");
+ $("#vl").innerHTML=D.videos.map((v,i)=>`<div class="it">${/instagram\.com/.test(v.url)?`<div class="yt">📸 Reel</div>`:yid(v.url)?`<img src="https://img.youtube.com/vi/${yid(v.url)}/hqdefault.jpg">`:`<video src="${esc(v.url)}#t=0.8" preload="metadata" muted></video>`}<button class="x" onclick="del('videos',${i})">✕</button><div class="m"><input value="${esc(v.title)}" onchange="D.videos[${i}].title=this.value" style="padding:5px 8px;font-size:.78rem"><div style="margin-top:4px"><button class="btn g" style="padding:3px 10px" onclick="mv('videos',${i},-1)">←</button> <button class="btn g" style="padding:3px 10px" onclick="mv('videos',${i},1)">→</button></div></div></div>`).join("");
  $("#gl").innerHTML=D.gallery.map((g,i)=>`<div class="it"><img src="${esc(th(g.url,300))}" loading="lazy"><button class="x" onclick="del('gallery',${i})">✕</button><div class="m"><select onchange="D.gallery[${i}].cat=this.value">${cats().map(c=>`<option ${c==g.cat?"selected":""}>${esc(c)}</option>`).join("")}</select><div style="margin-top:4px"><button class="btn g" style="padding:3px 10px" onclick="mv('gallery',${i},-1)">←</button> <button class="btn g" style="padding:3px 10px" onclick="mv('gallery',${i},1)">→</button></div></div></div>`).join("");
 }
 </script>
