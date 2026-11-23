@@ -63,7 +63,7 @@ small{color:var(--mut)}
 <script>
 const ADMIN_PASSWORD="admin123"; /* CHANGE THIS */
 const $=s=>document.querySelector(s),esc=s=>String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-let D={videos:[],gallery:[]},S=JSON.parse(localStorage.getItem("amit_cfg")||"{}");
+let D={videos:[],gallery:[]},S=Object.assign({bin:"6b03fe53ac6210605a9d78b6",key:"$2a$10$RjxthPmRs1dCJ7wC0eU1E.f8PvFhge/GSX0ls9nLNsCy0ABBHml5W",cloud:"u8f3rysn",preset:"amit films"},JSON.parse(localStorage.getItem("amit_cfg")||"{}"));
 S.cats=S.cats||"Stage LED, Wedding, Corporate, Concert, Festival";
 function toast(t){const e=$("#toast");e.textContent=t;e.style.display="block";clearTimeout(toast.t);toast.t=setTimeout(()=>e.style.display="none",2800)}
 function login(){if($("#pw").value===ADMIN_PASSWORD){$("#lock").remove();sessionStorage.ok=1;init()}else toast("Wrong password")}
@@ -89,14 +89,14 @@ async function up(file,type){
 }
 async function batch(files,type,add){
  let n=0;for(const f of files){toast(`Uploading ${++n}/${files.length}…`);try{add(await up(f,type),f.name.replace(/\.[^.]+$/,""))}catch(e){toast("Upload failed: "+f.name)}}
- render();toast("Uploaded – press Save changes")
+ render();await save();
 }
 $("#vf").onchange=e=>{batch([...e.target.files],"video",(url,t)=>D.videos.push({title:t,url}));e.target.value=""};
 $("#gf").onchange=e=>{const c=$("#gc").value;batch([...e.target.files],"image",url=>D.gallery.push({url,cat:c}));e.target.value=""};
-function addVid(){const t=$("#vt").value.trim(),u=$("#vu").value.trim();if(!u)return toast("Paste a link");D.videos.push({title:t||"Event video",url:u});$("#vt").value=$("#vu").value="";render()}
+function addVid(){const t=$("#vt").value.trim(),u=$("#vu").value.trim();if(!u)return toast("Paste a link");D.videos.push({title:t||"Event video",url:u});$("#vt").value=$("#vu").value="";render();save()}
 const yid=u=>(u.match(/(?:v=|youtu\.be\/|embed\/|shorts\/)([\w-]{11})/)||[])[1];
 const th=(u,w)=>u.includes("/upload/")?u.replace("/upload/",`/upload/f_auto,q_auto,w_${w}/`):u;
-function del(k,i){if(confirm("Remove this item?")){D[k].splice(i,1);render()}}
+function del(k,i){if(confirm("Remove this item?")){D[k].splice(i,1);render();save()}}
 function mv(k,i,d){const j=i+d;if(j<0||j>=D[k].length)return;[D[k][i],D[k][j]]=[D[k][j],D[k][i]];render()}
 function render(){
  $("#vc").textContent=D.videos.length;$("#gcn").textContent=D.gallery.length;
