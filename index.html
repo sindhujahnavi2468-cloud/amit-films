@@ -113,7 +113,7 @@ footer{padding:34px 0;text-align:center;color:var(--mut);font-size:.86rem;border
 <script>
 /* ===== FILL THESE ===== */
 const CFG={
-  BIN_ID:"",                 // JSONBin bin ID (make the bin PUBLIC so no key is needed to read)
+  BIN_ID:"6b03fe53ac6210605a9d78b6",                 // JSONBin bin ID (make the bin PUBLIC so no key is needed to read)
   WHATSAPP:"917798306505",   // country code + number, no +
   PHONE:"7798306505",
   INSTAGRAM:"amitledwall"
@@ -136,7 +136,7 @@ const isYT=u=>/youtu\.?be/.test(u),ytId=u=>(u.match(/(?:v=|youtu\.be\/|embed\/|s
 const thumb=(u,w)=>u.includes("/upload/")?u.replace("/upload/",`/upload/f_auto,q_auto,w_${w}/`):u;
 let D={videos:[],gallery:[]};
 async function load(){
- if(CFG.BIN_ID){try{const r=await fetch(`https://api.jsonbin.io/v3/b/${CFG.BIN_ID}/latest`);const j=await r.json();D=Object.assign(D,j.record||{});}catch(e){console.warn(e)}}
+ if(CFG.BIN_ID){try{const r=await fetch(`https://api.jsonbin.io/v3/b/${CFG.BIN_ID}/latest`,{cache:"no-store"});const j=await r.json();D=Object.assign(D,j.record||{});}catch(e){console.warn(e)}}
  vids();gal("All");reveal();
 }
 function vids(){
