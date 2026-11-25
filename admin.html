@@ -84,10 +84,11 @@ async function save(){
 async function up(file,type){
  if(!S.cloud||!S.preset)throw toast("Add Cloudinary details in Settings");
  const f=new FormData();f.append("file",file);f.append("upload_preset",S.preset);
- const r=await fetch(`https://api.cloudinary.com/v1_1/${S.cloud}/${type}/upload`,{method:"POST",body:f});const j=await r.json();if(!j.secure_url)throw 0;return j.secure_url
+ const r=await fetch(`https://api.cloudinary.com/v1_1/${S.cloud}/${type}/upload`,{method:"POST",body:f});const j=await r.json();if(!j.secure_url)throw new Error(j.error&&j.error.message||"unknown error");return j.secure_url
 }
 async function batch(files,type,add){
- let n=0;for(const f of files){toast(`Uploading ${++n}/${files.length}…`);try{add(await up(f,type),f.name.replace(/\.[^.]+$/,""))}catch(e){toast("Upload failed: "+f.name)}}
+ let n=0;for(const f of files){toast(`Uploading ${++n}/${files.length}…`);try{add(await up(f,type),f.name.replace(/\.[^.]+$/,""))}catch(e){alert("Upload failed: "+f.name+"
+"+(e.message||e))}}
  render();await save();
 }
 $("#vf").onchange=e=>{batch([...e.target.files],"video",(url,t)=>D.videos.push({title:t,url}));e.target.value=""};
