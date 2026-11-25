@@ -148,7 +148,7 @@ function vids(){
  $("#vg").innerHTML=(v.length?v:Array.from({length:6},(_,i)=>({empty:1,title:"Video "+(i+1)+" – coming soon"}))).map((x,i)=>{
   if(x.empty)return `<div class="vc empty rv"><div class="pl"><i>▶</i></div><div class="cp">${esc(x.title)}</div></div>`;
   const media=isIG(x.url)?`<div style="position:absolute;inset:0;background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045);display:grid;place-items:center;color:#fff;font-weight:800;font-size:1.1rem">📸 Instagram Reel</div>`:isYT(x.url)?`<img src="https://img.youtube.com/vi/${ytId(x.url)}/hqdefault.jpg" alt="${esc(x.title)}" loading="lazy">`:`<video src="${esc(vsrc(x.url))}${vpost(x.url)?"":"#t=0.8"}" poster="${esc(vpost(x.url))}" preload="${vpost(x.url)?"none":"metadata"}" muted playsinline></video>`;
-  return `<div class="vc rv" onclick="pv(${i})">${media}<div class="pl"><i>▶</i></div><div class="cp">${esc(x.title)}</div></div>`}).join("");
+  return `<div class="vc rv" onclick="pv(${i})">${media}<div class="pl"><i>▶</i></div>${x.title?`<div class="cp">${esc(x.title)}</div>`:""}</div>`}).join("");
 }
 function pv(i){const u=D.videos[i].url;if(isIG(u))return open_(`<iframe src="${igUrl(u)}" style="width:min(420px,92vw);height:82vh;aspect-ratio:auto;display:block;margin:auto;background:#fff" allowfullscreen></iframe>`);open_(isYT(u)?`<iframe src="https://www.youtube.com/embed/${ytId(u)}?autoplay=1&rel=0" allow="autoplay;fullscreen" allowfullscreen></iframe>`:`<video src="${esc(vsrc(u))}" controls autoplay playsinline></video>`)}
 function gal(c){
