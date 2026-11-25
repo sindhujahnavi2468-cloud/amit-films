@@ -81,10 +81,19 @@ async function save(){
  if(!S.bin||!S.key)return toast("Add JSONBin ID & key in Settings");
  try{const r=await fetch(`https://api.jsonbin.io/v3/b/${S.bin}`,{method:"PUT",headers:{"Content-Type":"application/json","X-Master-Key":S.key},body:JSON.stringify(D)});if(!r.ok)throw r.status;toast("✅ Saved! Website updated")}catch(e){toast("❌ Save failed ("+e+") – check ID/key")}
 }
-async function up(file,type){
- if(!S.cloud||!S.preset)throw toast("Add Cloudinary details in Settings");
- const f=new FormData();f.append("file",file);f.append("upload_preset",S.preset);
- const r=await fetch(`https://api.cloudinary.com/v1_1/${S.cloud}/${type}/upload`,{method:"POST",body:f});const j=await r.json();if(!j.secure_url)throw new Error(j.error&&j.error.message||"unknown error");return j.secure_url
+function up(file,type){
+ return new Promise((res,rej)=>{
+  if(!S.cloud||!S.preset)return rej(new Error("Add Cloudinary details in Settings"));
+  const f=new FormData();f.append("file",file);f.append("upload_preset",S.preset);
+  const x=new XMLHttpRequest();
+  x.open("POST",`https://api.cloudinary.com/v1_1/${S.cloud}/${type}/upload`);
+  x.upload.onprogress=e=>{if(e.lengthComputable)toast(`Uploading ${file.name.slice(0,20)}… ${Math.round(e.loaded/e.total*100)}%`)};
+  x.onload=()=>{let j={};try{j=JSON.parse(x.responseText)}catch(e){}
+   console.log("Cloudinary",x.status,j);
+   j.secure_url?res(j.secure_url):rej(new Error((j.error&&j.error.message)||("HTTP "+x.status)))};
+  x.onerror=()=>rej(new Error("Network error (connection dropped or blocked)"));
+  x.send(f);
+ });
 }
 async function batch(files,type,add){
  let n=0;
