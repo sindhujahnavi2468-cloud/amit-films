@@ -91,7 +91,7 @@ async function batch(files,type,add){
  for(const f of files){
   toast(`Uploading ${++n}/${files.length}…`);
   try{add(await up(f,type),f.name.replace(/\.[^.]+$/,""))}
-  catch(e){alert("Upload failed: "+f.name+"\n"+(e.message||e))}
+  catch(e){alert("Upload failed: "+f.name+" - "+(e.message||e))}
  }
  render();await save();
 }
