@@ -1,122 +1,379 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Admin – Amit LED Wall</title>
-<meta name="robots" content="noindex,nofollow">
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Amit Films — Admin</title>
+<meta name="robots" content="noindex,nofollow"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Cormorant+SC:wght@500;600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f6f3ee;--ink:#14142b;--mut:#6a6a82;--a:#5b3df5;--line:#e8e3d8;--r:#e5484d}
-*{box-sizing:border-box;margin:0}body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--ink)}
-.w{max-width:1050px;margin:auto;padding:22px}
-.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;flex-wrap:wrap;gap:12px}.top h1{font-size:1.4rem}
-.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:22px;margin-bottom:20px}
-.card h2{font-size:1.05rem;margin-bottom:14px}
-input,select{padding:12px 14px;border-radius:12px;border:1.5px solid var(--line);font:inherit;background:var(--bg);width:100%}input:focus,select:focus{outline:0;border-color:var(--a)}
-.btn{padding:12px 22px;border-radius:12px;border:0;background:var(--ink);color:#fff;font:inherit;font-weight:700;cursor:pointer}.btn:hover{background:var(--a)}.btn.g{background:#fff;color:var(--ink);border:1.5px solid var(--line)}.btn.s{background:#16a34a}
-.tabs{display:flex;gap:8px;margin-bottom:20px}.tabs button{padding:10px 22px;border-radius:99px;border:1.5px solid var(--line);background:#fff;font:inherit;font-weight:700;cursor:pointer}.tabs button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
-.row{display:grid;grid-template-columns:1fr 1fr auto;gap:10px;margin-bottom:12px}
-.drop{border:2px dashed #cfc7ff;border-radius:16px;padding:26px;text-align:center;color:var(--mut);background:#faf8ff;cursor:pointer;margin-bottom:14px}.drop:hover{border-color:var(--a)}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px;margin-top:16px}
-.it{position:relative;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fff}.it img,.it video{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:#eee}
-.it .m{padding:8px 10px;font-size:.78rem}.it .m b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.it .m select{padding:5px 8px;font-size:.78rem;margin-top:4px}
-.it .x{position:absolute;top:6px;right:6px;width:28px;height:28px;border-radius:50%;border:0;background:var(--r);color:#fff;cursor:pointer;font-weight:700}
-.it .yt{aspect-ratio:4/3;display:grid;place-items:center;background:#fff1f1;font-weight:800;color:var(--r)}
-#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:12px 24px;border-radius:99px;font-weight:600;display:none;z-index:9}
-#lock{position:fixed;inset:0;background:var(--bg);display:grid;place-items:center;z-index:20}#lock .card{width:min(360px,92vw);text-align:center}#lock input{margin:14px 0}
-small{color:var(--mut)}
-@media(max-width:640px){.row{grid-template-columns:1fr}}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--cream:#FAF8F4;--warm:#F5F2EC;--parchment:#EDE8DF;--brown:#2A1A0E;--gold:#A8844A;--gold-l:#C9A96E;--grey:#7A7065;--rule:#DDD8CF;--danger:#C0392B;--ok:#4A7A5A;--sb:230px}
+body{background:var(--warm);color:#1C1C1C;font-family:'Montserrat',sans-serif;display:flex;min-height:100vh}
+.sidebar{width:var(--sb);background:var(--brown);position:fixed;inset:0 auto 0 0;display:flex;flex-direction:column;overflow-y:auto;z-index:100}
+.sb-logo{padding:28px;border-bottom:1px solid rgba(255,255,255,.08)}
+.sb-logo b{font-family:'Cormorant SC',serif;font-weight:500;font-size:18px;color:#FAF8F4;letter-spacing:.08em;display:block}
+.sb-logo small{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold-l)}
+.sb-nav{padding:20px 0;flex:1}
+.sb-link{display:flex;gap:12px;align-items:center;padding:12px 28px;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(250,248,244,.55);cursor:pointer;border-left:2px solid transparent;text-decoration:none}
+.sb-link:hover{color:var(--gold-l);background:rgba(255,255,255,.04)}
+.sb-link.active{color:#FAF8F4;border-left-color:var(--gold);background:rgba(168,132,74,.14)}
+.sb-bot{padding:20px 28px;border-top:1px solid rgba(255,255,255,.08)}
+.sb-bot a{display:block;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(250,248,244,.4);text-decoration:none;margin-bottom:8px}
+.sb-bot a:hover{color:var(--gold-l)}
+.main{margin-left:var(--sb);flex:1;min-width:0}
+.bar{background:var(--cream);border-bottom:1px solid var(--rule);padding:0 36px;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+.bar h2{font-family:'Cormorant Garamond',serif;font-size:22px;font-style:italic;font-weight:400;color:var(--brown)}
+.btn{font:400 9px 'Montserrat',sans-serif;letter-spacing:2.5px;text-transform:uppercase;background:var(--gold);color:#fff;border:none;padding:11px 26px;cursor:pointer;transition:background .2s}
+.btn:hover{background:var(--gold-l)}.btn:disabled{opacity:.5}
+.btn.ghost{background:none;color:var(--grey);border:1px solid var(--rule)}
+.btn.ghost:hover{color:#1C1C1C;border-color:var(--grey)}
+.btn.sm{padding:8px 14px;font-size:8px}
+.btn.danger{background:none;color:var(--danger);border:1px solid var(--danger)}
+.btn.danger:hover{background:var(--danger);color:#fff}
+.content{padding:36px}
+.page{display:none}.page.active{display:block}
+.ph h1{font-family:'Cormorant SC',serif;font-weight:600;font-size:30px;color:var(--brown);letter-spacing:.04em}
+.ph p{font-size:12px;color:var(--grey);margin:6px 0 28px;line-height:1.7}
+.box{background:var(--cream);border:1px solid var(--rule);padding:26px 30px;margin-bottom:20px}
+.box h3{font-weight:400;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin-bottom:18px}
+.hint{font-size:10.5px;color:var(--grey);line-height:1.6;margin-top:12px}
+
+.slots{display:grid;gap:8px}
+.slot{position:relative;background:var(--parchment);border:1px dashed rgba(168,132,74,.4);overflow:hidden;cursor:pointer}
+.slot:hover{border-color:var(--gold)}
+.slot img{width:100%;height:100%;object-fit:cover;display:block}
+.slot .sn{position:absolute;top:7px;left:9px;font-size:8px;letter-spacing:1.5px;color:rgba(168,132,74,.8);z-index:2;text-shadow:0 0 4px rgba(255,255,255,.6)}
+.slot.has .sn{color:#fff;text-shadow:0 0 4px rgba(0,0,0,.6)}
+.slot .ov{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(168,132,74,.7);transition:background .2s}
+.slot.has .ov{color:transparent}
+.slot:hover .ov{background:rgba(42,26,14,.55);color:#fff}
+.slot .rm{position:absolute;top:7px;right:7px;width:24px;height:24px;border-radius:50%;border:none;background:rgba(192,57,43,.9);color:#fff;cursor:pointer;display:none;z-index:3;font-size:12px}
+.slot.has:hover .rm{display:block}
+.g5{grid-template-columns:repeat(5,1fr)}.g3{grid-template-columns:repeat(3,1fr);max-width:560px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;margin-bottom:22px}
+.stat{background:var(--cream);border:1px solid var(--rule);padding:18px;text-align:center}
+.stat b{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:600;display:block;color:var(--brown)}
+.stat span{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold)}
+
+label.l{display:block;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin:14px 0 6px}
+input.in{width:100%;background:var(--warm);border:1px solid var(--rule);padding:11px 14px;font:400 13px 'Montserrat',sans-serif;color:var(--brown);outline:none}
+input.in:focus{border-color:var(--gold)}
+.row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.item{background:var(--cream);border:1px solid var(--rule);padding:22px 26px;margin-bottom:16px}
+.item-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.item-head b{font-family:'Cormorant Garamond',serif;font-size:20px;font-style:italic;font-weight:600;color:var(--brown)}
+.cols{display:grid;grid-template-columns:200px 1fr;gap:26px}
+.gal{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:6px;margin-top:6px}
+.up-status{font-size:10px;color:var(--grey);margin-left:10px}
+
+.mgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px}
+.mi{background:var(--cream);border:1px solid var(--rule)}
+.mi .th{aspect-ratio:4/3;background:var(--parchment);display:flex;align-items:center;justify-content:center;overflow:hidden;font-size:10px;color:var(--grey);letter-spacing:1px}
+.mi .th img,.mi .th video{width:100%;height:100%;object-fit:cover}
+.mi .meta{padding:9px 10px;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold)}
+.mi .act{display:flex;border-top:1px solid var(--rule)}
+.mi .act button{flex:1;background:none;border:none;padding:8px;font:400 8px 'Montserrat';letter-spacing:1.5px;text-transform:uppercase;color:var(--grey);cursor:pointer}
+.mi .act button:hover{background:rgba(168,132,74,.1);color:var(--gold)}
+.mi .act button+button{border-left:1px solid var(--rule)}
+.mi .act .d:hover{background:rgba(192,57,43,.1);color:var(--danger)}
+
+.toast{position:fixed;bottom:30px;right:30px;background:var(--brown);color:#FAF8F4;padding:14px 24px;font-size:10px;letter-spacing:2px;text-transform:uppercase;z-index:9999;opacity:0;transform:translateY(10px);transition:.3s;pointer-events:none;max-width:420px;line-height:1.6}
+.toast.show{opacity:1;transform:none}.toast.err{background:var(--danger)}.toast.ok{background:var(--ok)}
+.dirty{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--danger);margin-right:16px;display:none}
+.dirty.on{display:inline}
+@media(max-width:800px){
+  :root{--sb:64px}
+  .sb-logo{padding:14px 6px;text-align:center}.sb-logo b{font-size:10px}.sb-logo small{display:none}
+  .sb-link{padding:14px 0;justify-content:center;font-size:0;border-left:none}.sb-link span{font-size:19px}
+  .sb-bot{padding:10px 4px;text-align:center}.sb-bot a{font-size:7px;letter-spacing:.5px}
+  .content{padding:18px 14px}.bar{padding:0 14px}
+  .g5{grid-template-columns:repeat(3,1fr)}.row{grid-template-columns:1fr}.cols{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
-<div id="lock"><div class="card"><h2>🔒 Amit LED Wall Admin</h2><input id="pw" type="password" placeholder="Password"><button class="btn" style="width:100%" onclick="login()">Enter</button></div></div>
 
-<div class="w">
-<div class="top"><h1>Amit LED Wall · Admin</h1><button class="btn s" onclick="save()">💾 Save changes</button></div>
-<div class="tabs"><button class="on" data-t="v">🎬 Videos</button><button data-t="g">🖼️ Gallery</button><button data-t="s">⚙️ Settings</button></div>
-
-<div id="v" class="pane"><div class="card"><h2>Upload videos</h2>
-<div class="drop" onclick="vf.click()">Click to upload videos (Cloudinary)<br><small>You can select many at once</small></div><input id="vf" type="file" accept="video/*" multiple hidden>
-<h2 style="margin-top:18px">…or add an Instagram Reel / YouTube / video link</h2>
-<div class="row"><input id="vt" placeholder="Title"><input id="vu" placeholder="Instagram Reel / YouTube / .mp4 link"><button class="btn" onclick="addVid()">Add</button></div></div>
-<div class="card"><h2>Videos (<span id="vc">0</span>)</h2><div class="grid" id="vl"></div></div></div>
-
-<div id="g" class="pane" hidden><div class="card"><h2>Upload photos</h2>
-<div style="max-width:260px;margin-bottom:12px"><small>Category for this upload</small><select id="gc"></select></div>
-<div class="drop" onclick="gf.click()">Click to upload images (Cloudinary)<br><small>Select many at once</small></div><input id="gf" type="file" accept="image/*" multiple hidden></div>
-<div class="card"><h2>Photos (<span id="gcn">0</span>)</h2><div class="grid" id="gl"></div></div></div>
-
-<div id="s" class="pane" hidden><div class="card"><h2>Connection settings</h2>
-<p><small>Saved only in this browser. Fill once.</small></p><br>
-<div style="display:grid;gap:12px">
-<input id="s_bin" placeholder="JSONBin BIN ID">
-<input id="s_key" placeholder="JSONBin Master Key (X-Master-Key)">
-<input id="s_cloud" placeholder="Cloudinary cloud name">
-<input id="s_preset" placeholder="Cloudinary unsigned upload preset">
-<input id="s_cats" placeholder="Gallery categories, comma separated">
-<button class="btn" onclick="saveCfg()">Save settings & reload data</button></div></div>
-<div class="card"><small>Tip: put the same Bin ID in index.html (CFG.BIN_ID). Make the bin public so visitors can read it. Create an <b>unsigned</b> upload preset in Cloudinary → Settings → Upload.</small></div></div>
+<!-- LOGIN -->
+<div id="gate" style="position:fixed;inset:0;background:linear-gradient(135deg,#2A1A0E,#1C1208);z-index:99999;display:flex;align-items:center;justify-content:center">
+  <div style="background:#FAF8F4;padding:52px 44px;width:380px;max-width:90vw;text-align:center;border-top:3px solid #A8844A;box-shadow:0 24px 60px rgba(0,0,0,.4)">
+    <div style="font-family:'Cormorant SC',serif;font-size:13px;letter-spacing:4px;color:#A8844A;margin-bottom:6px">AMIT FILMS</div>
+    <div style="font-family:'Cormorant Garamond',serif;font-size:32px;font-style:italic;font-weight:600;color:#2A1A0E;margin-bottom:32px">Admin Access</div>
+    <input type="password" id="pw" placeholder="Enter password" onkeydown="if(event.key==='Enter')login()" style="width:100%;padding:15px;border:1px solid #DDD8CF;background:#F5F2EC;font:400 13px Montserrat;outline:none;margin-bottom:18px"/>
+    <button class="btn" style="width:100%;padding:15px" onclick="login()">Enter</button>
+    <div id="pwErr" style="color:#C0392B;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;margin-top:16px;display:none">Incorrect password</div>
+  </div>
 </div>
-<div id="toast"></div>
+
+<aside class="sidebar">
+  <div class="sb-logo"><b>Amit Films</b><small>Admin Panel</small></div>
+  <nav class="sb-nav" id="sbNav">
+    <a class="sb-link active" data-p="site"><span>🌄</span>Logo &amp; Hero</a>
+    <a class="sb-link" data-p="frames"><span>🖼</span>Photography Grid</a>
+    <a class="sb-link" data-p="stories"><span>💌</span>Love Stories</a>
+    <a class="sb-link" data-p="films"><span>🎬</span>Films</a>
+    <a class="sb-link" data-p="intro"><span>🌿</span>Intro Section</a>
+    <a class="sb-link" data-p="about"><span>👤</span>About Section</a>
+    <a class="sb-link" data-p="media"><span>🗂</span>All Media</a>
+  </nav>
+  <div class="sb-bot"><a href="index.html" target="_blank">↗ View Website</a><a href="#" onclick="logout();return false">⎋ Log Out</a></div>
+</aside>
+
+<div class="main">
+  <div class="bar"><h2 id="title">Logo &amp; Hero</h2><div><span class="dirty" id="dirty">● Unsaved changes</span><button class="btn" id="saveBtn" onclick="saveAll()">Save &amp; Publish</button></div></div>
+  <div class="content">
+
+    <div class="page active" id="p-site">
+      <div class="ph"><h1>Logo &amp; Hero</h1><p>The logo appears in the navbar and footer. The hero image is the full-screen background at the top of the homepage.</p></div>
+      <div class="box"><h3>Logo (PNG with transparent background works best)</h3><div id="logoSlot" style="max-width:240px"></div></div>
+      <div class="box"><h3>Hero Background Image</h3><div id="heroSlot" style="max-width:460px"></div><p class="hint">💡 Landscape, at least 1920 × 1080 px. JPG, max 10 MB.</p></div>
+    </div>
+
+    <div class="page" id="p-frames">
+      <div class="ph"><h1>Photography Grid</h1><p>The 14 photos in the collage on the homepage (shown in this order, left to right, row by row). Click a slot to upload; you can also upload several at once.</p></div>
+      <div class="stats"><div class="stat"><b id="fFilled">0</b><span>Uploaded</span></div><div class="stat"><b id="fEmpty">14</b><span>Empty</span></div><div class="stat"><b>14</b><span>Total</span></div></div>
+      <div class="box"><h3>Image slots</h3><div class="slots g5" id="frameGrid"></div>
+        <div style="margin-top:16px"><button class="btn ghost sm" onclick="bulkFrames()">Bulk upload → fill empty slots</button><span class="up-status" id="bulkStatus"></span></div>
+        <p class="hint">💡 Portrait 1000 × 1300 px works best. JPG, max 10 MB each.</p></div>
+    </div>
+
+    <div class="page" id="p-stories">
+      <div class="ph"><h1>Love Stories</h1><p>Each story is a card on the homepage and opens its own gallery page. Add a cover image, then upload gallery photos.</p></div>
+      <div id="storyList"></div>
+      <button class="btn" onclick="addStory()">+ Add New Story</button>
+    </div>
+
+    <div class="page" id="p-films">
+      <div class="ph"><h1>Films</h1><p>Paste a YouTube link, or upload a video file directly (max 100 MB, MP4 recommended). Poster is optional for YouTube links.</p></div>
+      <div id="filmList"></div>
+      <button class="btn" onclick="addFilm()">+ Add New Film</button>
+    </div>
+
+    <div class="page" id="p-intro">
+      <div class="ph"><h1>Intro Section</h1><p>Images beside the "Creating Unforgettable Moments" text. If Mobile is empty, the Left image is used on phones.</p></div>
+      <div class="box"><h3>Left · Right · Mobile</h3><div class="slots g3" id="introSlots"></div><p class="hint">💡 Portrait 800 × 1200 px (2:3). JPG, max 10 MB.</p></div>
+    </div>
+
+    <div class="page" id="p-about">
+      <div class="ph"><h1>About Section</h1><p>Images beside the "A Steady Hand Through Changing Times" text.</p></div>
+      <div class="box"><h3>Left · Right · Mobile</h3><div class="slots g3" id="aboutSlots"></div><p class="hint">💡 Portrait 800 × 1200 px (2:3). JPG, max 10 MB.</p></div>
+    </div>
+
+    <div class="page" id="p-media">
+      <div class="ph"><h1>All Media</h1><p>Every image and video used anywhere on the website, in one place. Copy a link, open it, or remove it. Remember to Save &amp; Publish after removing.</p></div>
+      <div class="stats"><div class="stat"><b id="mImg">0</b><span>Images</span></div><div class="stat"><b id="mVid">0</b><span>Videos</span></div><div class="stat"><b id="mTot">0</b><span>Total</span></div></div>
+      <div class="mgrid" id="mediaGrid"></div>
+    </div>
+
+  </div>
+</div>
+<div class="toast" id="toast"></div>
 
 <script>
-const ADMIN_PASSWORD="admin123"; /* CHANGE THIS */
-const $=s=>document.querySelector(s),esc=s=>String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-let D={videos:[],gallery:[]},S=Object.assign({bin:"6b044786ac6210605a9e2395",key:"$2a$10$RjxthPmRs1dCJ7wC0eU1E.f8PvFhge/GSX0ls9nLNsCy0ABBHml5W",cloud:"u8f3rysn",preset:"amit films"},JSON.parse(localStorage.getItem("amit_cfg")||"{}"));
-S.cats=S.cats||"Stage LED, Wedding, Corporate, Concert, Festival";
-function toast(t){const e=$("#toast");e.textContent=t;e.style.display="block";clearTimeout(toast.t);toast.t=setTimeout(()=>e.style.display="none",2800)}
-function login(){if($("#pw").value===ADMIN_PASSWORD){$("#lock").remove();sessionStorage.ok=1;init()}else toast("Wrong password")}
-$("#pw").onkeydown=e=>{if(e.key=="Enter")login()};
-document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tabs button").forEach(x=>x.classList.toggle("on",x==b));document.querySelectorAll(".pane").forEach(p=>p.hidden=p.id!=b.dataset.t)});
-function fillCfg(){["bin","key","cloud","preset","cats"].forEach(k=>$("#s_"+k).value=S[k]||"");const c=cats();$("#gc").innerHTML=c.map(x=>`<option>${esc(x)}</option>`).join("")}
-const cats=()=>S.cats.split(",").map(x=>x.trim()).filter(Boolean);
-function saveCfg(){["bin","key","cloud","preset","cats"].forEach(k=>S[k]=$("#s_"+k).value.trim());localStorage.setItem("amit_cfg",JSON.stringify(S));fillCfg();toast("Settings saved");pull()}
-async function init(){fillCfg();render();if(S.bin)pull()}
-async function pull(){
- if(!S.bin)return toast("Add JSONBin ID in Settings");
- try{const r=await fetch(`https://api.jsonbin.io/v3/b/${S.bin}/latest`,{headers:S.key?{"X-Master-Key":S.key}:{}});const j=await r.json();if(!r.ok)throw 0;D=Object.assign({videos:[],gallery:[]},j.record);render();toast("Data loaded")}catch(e){toast("Could not load bin")}
+/* ══════════ CONFIG ══════════ */
+const ADMIN_PASSWORD   = 'amit123';
+const BIN_ID           = 'PASTE_YOUR_BIN_ID_HERE';      // from jsonbin.io
+const MASTER_KEY       = 'PASTE_YOUR_JSONBIN_KEY_HERE'; // X-Master-Key (or Access Key with Update permission)
+const CLOUD_NAME       = 'u8f3rysn';
+const UPLOAD_PRESET    = 'amit films';                   // must be an UNSIGNED preset
+/* ═══════════════════════════ */
+
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const BIN_URL='https://api.jsonbin.io/v3/b/'+BIN_ID;
+
+/* auth */
+if(sessionStorage.getItem('af_admin')==='1')$('gate').style.display='none';
+function login(){if($('pw').value===ADMIN_PASSWORD){sessionStorage.setItem('af_admin','1');$('gate').style.display='none';}else $('pwErr').style.display='block';}
+function logout(){sessionStorage.removeItem('af_admin');location.reload();}
+
+/* state */
+const blank=()=>({logo:null,hero:{image:null},frames:Array(14).fill(null),stories:[],films:[],intro:{left:null,right:null,mobile:null},about:{left:null,right:null,mobile:null}});
+let state=blank(),dirty=false;
+function markDirty(v=true){dirty=v;$('dirty').classList.toggle('on',v);}
+addEventListener('beforeunload',e=>{if(dirty){e.preventDefault();e.returnValue='';}});
+
+/* toast */
+let tt;function toast(m,t=''){const e=$('toast');e.textContent=m;e.className='toast show '+t;clearTimeout(tt);tt=setTimeout(()=>e.className='toast',3400);}
+
+/* nav */
+const titles={site:'Logo & Hero',frames:'Photography Grid',stories:'Love Stories',films:'Films',intro:'Intro Section',about:'About Section',media:'All Media'};
+$('sbNav').addEventListener('click',e=>{const a=e.target.closest('.sb-link');if(!a)return;
+  document.querySelectorAll('.sb-link').forEach(x=>x.classList.remove('active'));a.classList.add('active');
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));$('p-'+a.dataset.p).classList.add('active');
+  $('title').textContent=titles[a.dataset.p];if(a.dataset.p==='media')renderMedia();});
+
+/* path helpers */
+function pathGet(p){return p.split('.').reduce((o,k)=>o==null?o:o[k],state);}
+function pathSet(p,v){const k=p.split('.');const last=k.pop();const o=k.reduce((o,x)=>o[x],state);o[last]=v;}
+function pathClear(p){
+  const k=p.split('.');const last=k.pop();const par=k.reduce((o,x)=>o[x],state);
+  if(Array.isArray(par)&&k[k.length-1]==='gallery')par.splice(+last,1);
+  else if(Array.isArray(par)&&k[k.length-1]==='frames')par[+last]=null;
+  else par[last]=(last==='url'||last==='poster')?'':null;
 }
-async function save(){
- if(!S.bin||!S.key)return toast("Add JSONBin ID & key in Settings");
- try{const r=await fetch(`https://api.jsonbin.io/v3/b/${S.bin}`,{method:"PUT",headers:{"Content-Type":"application/json","X-Master-Key":S.key},body:JSON.stringify(D)});if(!r.ok)throw r.status;toast("✅ Saved! Website updated")}catch(e){toast("❌ Save failed ("+e+") – check ID/key")}
+
+/* cloudinary */
+async function upload(file,type='image'){
+  const max=type==='video'?100:10;
+  if(file.size>max*1048576){toast(`File too large — max ${max}MB`,'err');return null;}
+  const fd=new FormData();fd.append('file',file);fd.append('upload_preset',UPLOAD_PRESET);
+  try{
+    const r=await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/${type}/upload`,{method:'POST',body:fd});
+    const d=await r.json();
+    if(!d.secure_url){toast('Upload failed: '+((d.error&&d.error.message)||'check preset'),'err');return null;}
+    return d.secure_url;
+  }catch(e){toast('Upload failed — network error','err');return null;}
 }
-function up(file,type){
- return new Promise((res,rej)=>{
-  if(!S.cloud||!S.preset)return rej(new Error("Add Cloudinary details in Settings"));
-  const f=new FormData();f.append("file",file);f.append("upload_preset",S.preset);
-  const x=new XMLHttpRequest();
-  x.open("POST",`https://api.cloudinary.com/v1_1/${S.cloud}/${type}/upload`);
-  x.upload.onprogress=e=>{if(e.lengthComputable)toast(`Uploading ${file.name.slice(0,20)}… ${Math.round(e.loaded/e.total*100)}%`)};
-  x.onload=()=>{let j={};try{j=JSON.parse(x.responseText)}catch(e){}
-   console.log("Cloudinary",x.status,j);
-   j.secure_url?res(j.secure_url):rej(new Error((j.error&&j.error.message)||("HTTP "+x.status)))};
-  x.onerror=()=>rej(new Error("Network error (connection dropped or blocked)"));
-  x.send(f);
- });
+function pick(accept,multiple){return new Promise(res=>{const i=document.createElement('input');i.type='file';i.accept=accept;i.multiple=!!multiple;i.onchange=()=>res([...i.files]);i.click();});}
+
+/* generic image slot */
+function slot(path,label,ratio='3/4'){
+  const u=pathGet(path);
+  return `<div class="slot ${u?'has':''}" style="aspect-ratio:${ratio}" onclick="uploadPath('${path}')">
+    ${u?`<img src="${esc(u)}" alt=""/>`:''}<span class="sn">${label}</span>
+    <div class="ov">${u?'✎ Change':'+ Upload'}</div>
+    ${u?`<button class="rm" title="Remove" onclick="event.stopPropagation();clearPath('${path}')">✕</button>`:''}</div>`;
 }
-async function batch(files,type,add){
- let n=0;
- for(const f of files){
-  toast(`Uploading ${++n}/${files.length}…`);
-  try{add(await up(f,type),f.name.replace(/\.[^.]+$/,""))}
-  catch(e){alert("Upload failed: "+f.name+" - "+(e.message||e))}
- }
- render();await save();
+async function uploadPath(path){
+  const [f]=await pick('image/*');if(!f)return;
+  toast('Uploading…');const u=await upload(f);
+  if(u){pathSet(path,u);markDirty();renderAll();toast('Uploaded — remember to Save & Publish','ok');}
 }
-$("#vf").onchange=e=>{batch([...e.target.files],"video",(url,t)=>D.videos.push({title:"",url}));e.target.value=""};
-$("#gf").onchange=e=>{const c=$("#gc").value;batch([...e.target.files],"image",url=>D.gallery.push({url,cat:c}));e.target.value=""};
-function addVid(){const t=$("#vt").value.trim(),u=$("#vu").value.trim();if(!u)return toast("Paste a link");D.videos.push({title:t||"Event video",url:u});$("#vt").value=$("#vu").value="";render();save()}
-const yid=u=>(u.match(/(?:v=|youtu\.be\/|embed\/|shorts\/)([\w-]{11})/)||[])[1];
-const th=(u,w)=>u.includes("/upload/")?u.replace("/upload/",`/upload/f_auto,q_auto,w_${w}/`):u;
-function del(k,i){if(confirm("Remove this item?")){D[k].splice(i,1);render();save()}}
-function mv(k,i,d){const j=i+d;if(j<0||j>=D[k].length)return;[D[k][i],D[k][j]]=[D[k][j],D[k][i]];render()}
-function render(){
- $("#vc").textContent=D.videos.length;$("#gcn").textContent=D.gallery.length;
- $("#vl").innerHTML=D.videos.map((v,i)=>`<div class="it">${/instagram\.com/.test(v.url)?`<div class="yt">📸 Reel</div>`:yid(v.url)?`<img src="https://img.youtube.com/vi/${yid(v.url)}/hqdefault.jpg">`:`<video src="${esc(v.url)}#t=0.8" preload="metadata" muted></video>`}<button class="x" onclick="del('videos',${i})">✕</button><div class="m"><input value="${esc(v.title)}" onchange="D.videos[${i}].title=this.value" style="padding:5px 8px;font-size:.78rem"><div style="margin-top:4px"><button class="btn g" style="padding:3px 10px" onclick="mv('videos',${i},-1)">←</button> <button class="btn g" style="padding:3px 10px" onclick="mv('videos',${i},1)">→</button></div></div></div>`).join("");
- $("#gl").innerHTML=D.gallery.map((g,i)=>`<div class="it"><img src="${esc(th(g.url,300))}" loading="lazy"><button class="x" onclick="del('gallery',${i})">✕</button><div class="m"><select onchange="D.gallery[${i}].cat=this.value">${cats().map(c=>`<option ${c==g.cat?"selected":""}>${esc(c)}</option>`).join("")}</select><div style="margin-top:4px"><button class="btn g" style="padding:3px 10px" onclick="mv('gallery',${i},-1)">←</button> <button class="btn g" style="padding:3px 10px" onclick="mv('gallery',${i},1)">→</button></div></div></div>`).join("");
+function clearPath(path){pathClear(path);markDirty();renderAll();toast('Removed — remember to Save & Publish');}
+
+/* ── render ── */
+function renderAll(){renderSite();renderFrames();renderStories();renderFilms();renderSections();
+  if($('p-media').classList.contains('active'))renderMedia();}
+function renderSite(){
+  $('logoSlot').innerHTML=slot('logo','LOGO','3/2');
+  $('heroSlot').innerHTML=slot('hero.image','HERO','16/9');
 }
-if(sessionStorage.ok){$("#lock").remove();init()}
+function renderFrames(){
+  $('frameGrid').innerHTML=state.frames.map((_,i)=>slot('frames.'+i,String(i+1).padStart(2,'0'))).join('');
+  const n=state.frames.filter(Boolean).length;$('fFilled').textContent=n;$('fEmpty').textContent=14-n;
+}
+async function bulkFrames(){
+  const files=await pick('image/*',true);if(!files.length)return;
+  const empties=state.frames.map((v,i)=>v?null:i).filter(i=>i!==null);
+  if(files.length>empties.length)toast(`Only ${empties.length} empty slots — extra files skipped`,'err');
+  let done=0;
+  for(const f of files.slice(0,empties.length)){
+    $('bulkStatus').textContent=`Uploading ${++done} of ${Math.min(files.length,empties.length)}…`;
+    const u=await upload(f);if(u){state.frames[empties[done-1]]=u;markDirty();renderFrames();}
+  }
+  $('bulkStatus').textContent='';toast('Done — remember to Save & Publish','ok');
+}
+function renderSections(){
+  ['intro','about'].forEach(s=>{
+    $(s+'Slots').innerHTML=['left','right','mobile'].map(f=>slot(s+'.'+f,f.toUpperCase(),'2/3')).join('');
+  });
+}
+
+/* stories */
+function renderStories(){
+  $('storyList').innerHTML=state.stories.length?state.stories.map((s,i)=>`
+  <div class="item">
+    <div class="item-head"><b>${esc(s.name)||'New story'}</b><button class="btn danger sm" onclick="delItem('stories',${i})">Delete</button></div>
+    <div class="cols">
+      <div><label class="l" style="margin-top:0">Cover Image</label>${slot('stories.'+i+'.cover','COVER','4/5')}</div>
+      <div>
+        <div class="row">
+          <div><label class="l" style="margin-top:0">Couple Names</label><input class="in" value="${esc(s.name)}" oninput="state.stories[${i}].name=this.value;markDirty()" placeholder="e.g. Ankith &amp; Ritu"/></div>
+          <div><label class="l" style="margin-top:0">Tag</label><input class="in" value="${esc(s.tag)}" oninput="state.stories[${i}].tag=this.value;markDirty()" placeholder="e.g. Pre-Wedding"/></div>
+          <div><label class="l" style="margin-top:0">Location &amp; Date</label><input class="in" value="${esc(s.location)}" oninput="state.stories[${i}].location=this.value;markDirty()" placeholder="e.g. Udaipur, Apr 2026"/></div>
+        </div>
+        <label class="l">Gallery Photos (${(s.gallery||[]).length}) <button class="btn ghost sm" style="margin-left:10px" onclick="addGallery(${i})">+ Upload photos</button><span class="up-status" id="gs${i}"></span></label>
+        <div class="gal">${(s.gallery||[]).map((_,g)=>slot(`stories.${i}.gallery.${g}`,String(g+1),'1/1')).join('')}</div>
+      </div>
+    </div>
+  </div>`).join(''):'<div class="box" style="text-align:center;color:var(--grey);font-size:12px">No stories yet.</div>';
+}
+function addStory(){state.stories.push({id:'s'+Date.now(),name:'',tag:'Wedding',location:'',cover:null,gallery:[]});markDirty();renderAll();}
+async function addGallery(i){
+  const files=await pick('image/*',true);if(!files.length)return;
+  const s=state.stories[i];s.gallery=s.gallery||[];let n=0;
+  for(const f of files){$('gs'+i).textContent=`Uploading ${++n} of ${files.length}…`;const u=await upload(f);if(u){s.gallery.push(u);markDirty();}}
+  renderAll();toast('Gallery updated — remember to Save & Publish','ok');
+}
+
+/* films */
+function renderFilms(){
+  $('filmList').innerHTML=state.films.length?state.films.map((f,i)=>`
+  <div class="item">
+    <div class="item-head"><b>${esc(f.title)||'New film'}</b><button class="btn danger sm" onclick="delItem('films',${i})">Delete</button></div>
+    <div class="cols">
+      <div><label class="l" style="margin-top:0">Poster</label>${slot('films.'+i+'.poster','POSTER','16/9')}</div>
+      <div>
+        <label class="l" style="margin-top:0">Film Title</label><input class="in" value="${esc(f.title)}" oninput="state.films[${i}].title=this.value;markDirty()" placeholder="e.g. Ankith &amp; Ritu — A Love Story"/>
+        <label class="l">Video — YouTube link or file URL</label><input class="in" id="furl${i}" value="${esc(f.url)}" oninput="state.films[${i}].url=this.value;markDirty()" placeholder="https://youtu.be/…"/>
+        <div style="margin-top:10px"><button class="btn ghost sm" onclick="uploadFilm(${i})">Upload video file</button><span class="up-status" id="fs${i}"></span></div>
+      </div>
+    </div>
+  </div>`).join(''):'<div class="box" style="text-align:center;color:var(--grey);font-size:12px">No films yet.</div>';
+}
+function addFilm(){state.films.push({id:'v'+Date.now(),title:'',url:'',poster:''});markDirty();renderAll();}
+async function uploadFilm(i){
+  const [f]=await pick('video/*');if(!f)return;
+  $('fs'+i).textContent='Uploading video… please wait';toast('Uploading video…');
+  const u=await upload(f,'video');
+  if(u){state.films[i].url=u;markDirty();renderAll();toast('Video uploaded — remember to Save & Publish','ok');}
+  else $('fs'+i).textContent='';
+}
+
+function delItem(kind,i){
+  const it=state[kind][i];
+  if(!confirm('Delete "'+(it.name||it.title||'this item')+'"? This removes it from the website after you save.'))return;
+  state[kind].splice(i,1);markDirty();renderAll();toast('Deleted — remember to Save & Publish');
+}
+
+/* all media */
+const ytRe=/(youtube\.com|youtu\.be)/;
+function collectMedia(){
+  const m=[];const add=(label,path,url,type='image')=>{if(url)m.push({label,path,url,type});};
+  add('Logo','logo',state.logo);add('Hero','hero.image',state.hero.image);
+  state.frames.forEach((u,i)=>add('Grid '+(i+1),'frames.'+i,u));
+  ['left','right','mobile'].forEach(f=>{add('Intro '+f,'intro.'+f,state.intro[f]);add('About '+f,'about.'+f,state.about[f]);});
+  state.stories.forEach((s,i)=>{add((s.name||'Story')+' cover','stories.'+i+'.cover',s.cover);(s.gallery||[]).forEach((u,g)=>add((s.name||'Story')+' #'+(g+1),`stories.${i}.gallery.${g}`,u));});
+  state.films.forEach((f,i)=>{add((f.title||'Film')+' poster','films.'+i+'.poster',f.poster);if(f.url)add((f.title||'Film')+' video','films.'+i+'.url',f.url,ytRe.test(f.url)?'youtube':'video');});
+  return m;
+}
+function renderMedia(){
+  const m=collectMedia();
+  $('mImg').textContent=m.filter(x=>x.type==='image').length;
+  $('mVid').textContent=m.filter(x=>x.type!=='image').length;
+  $('mTot').textContent=m.length;
+  window.__media=m;
+  $('mediaGrid').innerHTML=m.length?m.map((x,i)=>`<div class="mi">
+    <div class="th">${x.type==='image'?`<img loading="lazy" src="${esc(x.url)}" alt=""/>`:x.type==='video'?`<video src="${esc(x.url)}#t=0.5" preload="metadata" muted></video>`:'▶ YouTube'}</div>
+    <div class="meta">${esc(x.label)}</div>
+    <div class="act"><button onclick="window.open(__media[${i}].url,'_blank')">Open</button><button onclick="navigator.clipboard.writeText(__media[${i}].url);toast('Link copied','ok')">Copy</button><button class="d" onclick="if(confirm('Remove this from the website?'))clearPath(__media[${i}].path)">Remove</button></div></div>`).join('')
+    :'<div class="box" style="grid-column:1/-1;text-align:center;color:var(--grey);font-size:12px">No media uploaded yet.</div>';
+}
+
+/* save / load */
+async function saveAll(){
+  if(BIN_ID.startsWith('PASTE')||MASTER_KEY.startsWith('PASTE')){toast('Add your JSONBin Bin ID and key in admin.html first','err');return;}
+  const b=$('saveBtn');b.disabled=true;b.textContent='Saving…';
+  try{
+    const r=await fetch(BIN_URL,{method:'PUT',headers:{'Content-Type':'application/json','X-Master-Key':MASTER_KEY,'X-Bin-Versioning':'false'},body:JSON.stringify(state)});
+    if(r.ok){markDirty(false);toast('Saved & published','ok');}
+    else{const d=await r.json().catch(()=>({}));toast('Save failed: '+(d.message||r.status),'err');}
+  }catch(e){toast('Could not reach server','err');}
+  b.disabled=false;b.textContent='Save & Publish';
+}
+async function init(){
+  if(!BIN_ID.startsWith('PASTE')&&!MASTER_KEY.startsWith('PASTE')){
+    try{
+      const r=await fetch(BIN_URL+'/latest?t='+Date.now(),{headers:{'X-Master-Key':MASTER_KEY,'X-Bin-Meta':'false'}});
+      const d=await r.json();const rec=d.record||d;
+      if(rec&&!rec.message){const b=blank();state={...b,...rec,hero:{...b.hero,...rec.hero},intro:{...b.intro,...rec.intro},about:{...b.about,...rec.about}};
+        while(state.frames.length<14)state.frames.push(null);}
+    }catch(e){toast('Could not load saved content','err');}
+  }else toast('Set BIN_ID and MASTER_KEY in admin.html to connect','err');
+  renderAll();
+}
+init();
 </script>
 </body>
 </html>
