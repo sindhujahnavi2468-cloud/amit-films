@@ -91,7 +91,7 @@ async function batch(files,type,add){
 "+(e.message||e))}}
  render();await save();
 }
-$("#vf").onchange=e=>{batch([...e.target.files],"video",(url,t)=>D.videos.push({title:t,url}));e.target.value=""};
+$("#vf").onchange=e=>{batch([...e.target.files],"video",(url,t)=>D.videos.push({title:"",url}));e.target.value=""};
 $("#gf").onchange=e=>{const c=$("#gc").value;batch([...e.target.files],"image",url=>D.gallery.push({url,cat:c}));e.target.value=""};
 function addVid(){const t=$("#vt").value.trim(),u=$("#vu").value.trim();if(!u)return toast("Paste a link");D.videos.push({title:t||"Event video",url:u});$("#vt").value=$("#vu").value="";render();save()}
 const yid=u=>(u.match(/(?:v=|youtu\.be\/|embed\/|shorts\/)([\w-]{11})/)||[])[1];
